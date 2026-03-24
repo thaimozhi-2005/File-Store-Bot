@@ -1,5 +1,12 @@
-
 import asyncio
+
+# Fix for Pyrogram on Python 3.10+
+import asyncio
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+    
 from bot import Bot, web_app
 from pyrogram import compose
 from config import *

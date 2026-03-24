@@ -85,14 +85,16 @@ async def start_series(client: Client, message: Message):
         f"➤ Eᴘɪsᴏᴅᴇ ɴᴜᴍʙᴇʀs ᴀʀᴇ ᴀᴜᴛᴏ-ᴅᴇᴛᴇᴄᴛᴇᴅ ꜰʀᴏᴍ ꜰɪʟᴇɴᴀᴍᴇ\n"
         f"➤ Wʜᴇɴ ᴅᴏɴᴇ, sᴇɴᴅ <code>/done</code>", quote=True)
 
-# ─── File Listener ───────────────────────────────────────────
+from pyrogram import StopPropagation
+
 @Client.on_message(filters.private & (filters.document | filters.video | filters.audio), group=-1)
 async def file_receiver(client: Client, message: Message):
     user_id = message.from_user.id
     if user_id not in ACTIVE_SESSIONS:
         return
-    message.stop_propagation()
-
+        
+    raise StopPropagation
+    
     file_size = 0
     file_name = "Unknown_File"
     if getattr(message, "document", None):
@@ -134,9 +136,9 @@ async def done_command(client: Client, message: Message):
     user_id = message.from_user.id
     if user_id not in ACTIVE_SESSIONS:
         return
-    message.stop_propagation()
-
+        
     session = ACTIVE_SESSIONS.pop(user_id)
+    raise StopPropagation
     files = session["files"]
     title = session["title"]
 

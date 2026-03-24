@@ -7,18 +7,23 @@ from pyrogram.types import Message
 TELEGRAPH_URL = "https://graph.org/upload"
 
 async def upload_to_telegraph(file_path):
-    try:
-        async with aiohttp.ClientSession() as session:
-            with open(file_path, 'rb') as f:
-                async with session.post(TELEGRAPH_URL, data={'file': f}) as resp:
-                    if resp.status == 200:
-                        data = await resp.json()
-                        if isinstance(data, list) and len(data) > 0:
-                            return f"https://graph.org{data[0]['src']}"
-                    else:
-                        print(f"Telegraph upload failed with status {resp.status}")
-    except Exception as e:
-        print(f"Telegraph upload error: {e}")
+    endpoints = [
+        "https://graph.org/upload",
+        "https://telegra.ph/upload"
+    ]
+    for url in endpoints:
+        try:
+            async with aiohttp.ClientSession() as session:
+                with open(file_path, 'rb') as f:
+                    async with session.post(url, data={'file': f}, timeout=aiohttp.ClientTimeout(total=20)) as resp:
+                        if resp.status == 200:
+                            data = await resp.json()
+                            if isinstance(data, list) and len(data) > 0:
+                                base_url = "https://graph.org" if "graph.org" in url else "https://telegra.ph"
+                                return f"{base_url}{data[0]['src']}"
+        except Exception as e:
+            print(f"Telegraph upload error for {url}: {e}")
+            continue
     return None
 
 @Client.on_message(filters.private & filters.command(["telegraph", "img", "tgt"]))

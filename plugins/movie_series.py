@@ -92,8 +92,6 @@ async def file_receiver(client: Client, message: Message):
     user_id = message.from_user.id
     if user_id not in ACTIVE_SESSIONS:
         return
-        
-    raise StopPropagation
     
     file_size = 0
     file_name = "Unknown_File"
@@ -129,6 +127,8 @@ async def file_receiver(client: Client, message: Message):
         count = len(ACTIVE_SESSIONS[user_id]["files"])
         ep_label = f"Ep {ep_num}" if ep_num else "Unknown"
         await message.reply(f"✅ Added {ep_label} (Total: {count})", quote=True, disable_notification=True)
+        
+    raise StopPropagation
 
 # ─── Done command ─────────────────────────────────────────────
 @Client.on_message(filters.private & filters.command("done"), group=-1)
@@ -138,7 +138,6 @@ async def done_command(client: Client, message: Message):
         return
         
     session = ACTIVE_SESSIONS.pop(user_id)
-    raise StopPropagation
     files = session["files"]
     title = session["title"]
 
@@ -197,3 +196,5 @@ async def done_command(client: Client, message: Message):
         )
     else:
         await message.reply(final_text, disable_web_page_preview=True)
+        
+    raise StopPropagation

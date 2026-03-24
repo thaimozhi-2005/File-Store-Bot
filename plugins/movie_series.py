@@ -40,11 +40,11 @@ async def movie_maker(client: Client, message: Message):
                 msg = await client.ask(
                     text="⏳ Wᴀɪᴛɪɴɢ ꜰᴏʀ ᴍᴏᴠɪᴇ ꜰɪʟᴇs ᴏʀ `/done`...",
                     chat_id=message.from_user.id,
-                    filters=(filters.incoming & ~filters.edited),
+                    filters=(filters.text | filters.document | filters.video | filters.audio),
                     timeout=300
                 )
             except Exception as e:
-                await message.reply("⏳ Tɪᴍᴇᴏᴜᴛ ʀᴇᴀᴄʜᴇᴅ. Pʀᴏᴄᴇss ᴄᴀɴᴄᴇʟʟᴇᴅ.")
+                await message.reply(f"⏳ Tɪᴍᴇᴏᴜᴛ ʀᴇᴀᴄʜᴇᴅ. Pʀᴏᴄᴇss ᴄᴀɴᴄᴇʟʟᴇᴅ. Eʀʀᴏʀ: {str(e)}")
                 return
                 
             if msg.text and msg.text.startswith("/done"):
@@ -103,11 +103,11 @@ async def series_maker(client: Client, message: Message):
                 msg = await client.ask(
                     text="⏳ Wᴀɪᴛɪɴɢ ꜰᴏʀ ᴇᴘɪsᴏᴅᴇs ᴏʀ `/done`...",
                     chat_id=message.from_user.id,
-                    filters=(filters.incoming & ~filters.edited),
+                    filters=(filters.text | filters.document | filters.video | filters.audio),
                     timeout=300
                 )
             except Exception as e:
-                await message.reply("⏳ Tɪᴍᴇᴏᴜᴛ ʀᴇᴀᴄʜᴇᴅ. Pʀᴏᴄᴇss ᴄᴀɴᴄᴇʟʟᴇᴅ.")
+                await message.reply(f"⏳ Tɪᴍᴇᴏᴜᴛ ʀᴇᴀᴄʜᴇᴅ. Pʀᴏᴄᴇss ᴄᴀɴᴄᴇʟʟᴇᴅ. Eʀʀᴏʀ: {str(e)}")
                 return
                 
             if msg.text and msg.text.startswith("/done"):

@@ -90,7 +90,7 @@ async def batch(client: Client, message: Message):
     base64_string = await encode(string)
     link = f"https://t.me/{client.username}?start={base64_string}"
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔁 sʜᴀʀᴇ ᴜʀʟ", url=f'https://telegram.me/share/url?url={link}')]])
-    await second_message.reply_text(f"<blockquote>✓ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʙᴀᴛᴄʜ ʟɪɴᴋ</blockquote>\n\n<code>{link}</code>", quote=True, reply_markup=reply_markup)
+    await second_message.reply_text(f"<blockquote>✓ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʙᴀᴛᴄʜ ʟɪɴᴋ</blockquote>\n\n{link}", quote=True, disable_web_page_preview=True, reply_markup=reply_markup)
 
 #===============================================================#
 
@@ -126,7 +126,7 @@ async def link_generator(client: Client, message: Message):
     base64_string = await encode(f"get-{msg_id * abs(source_channel_id)}")
     link = f"https://t.me/{client.username}?start={base64_string}"
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔁 sʜᴀʀᴇ ᴜʀʟ", url=f'https://telegram.me/share/url?url={link}')]])
-    await channel_message.reply_text(f"<blockquote>✓ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ</blockquote>\n\n<code>{link}</code>", quote=True, reply_markup=reply_markup)
+    await channel_message.reply_text(f"<blockquote>✓ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ</blockquote>\n\n{link}", quote=True, disable_web_page_preview=True, reply_markup=reply_markup)
 
 #===============================================================#
 
@@ -175,7 +175,7 @@ async def nbatch(client: Client, message: Message):
         [InlineKeyboardButton("📫 ʏᴏᴜʀ ʙᴀᴛᴄʜ ᴜʀʟ", url=f'https://telegram.me/share/url?url={link}')]
     ])
     
-    await first_message.reply_text(f"<blockquote>✓ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʙᴀᴛᴄʜ ʟɪɴᴋ</blockquote>\n\n<code>{link}</code>", quote=True, reply_markup=reply_markup)    
+    await first_message.reply_text(f"<blockquote>✓ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʙᴀᴛᴄʜ ʟɪɴᴋ</blockquote>\n\n{link}", quote=True, disable_web_page_preview=True, reply_markup=reply_markup)    
 
 #===============================================================#
 
@@ -263,8 +263,13 @@ async def bulk(client: Client, message: Message):
         
     db_key = str(source_channel_id)[-4:] if len(str(source_channel_id)) >= 4 else str(source_channel_id)
         
+    batch_string = f"get-{f_msg_id * abs(source_channel_id)}-{s_msg_id * abs(source_channel_id)}"
+    base64_batch = await encode(batch_string)
+    batch_link = f"https://t.me/{client.username}?start={base64_batch}"
+        
     final_text = f"📦 Bulk Upload Complete\n\nTotal Files: {len(file_links)}\nDB Key: {db_key}\n\nDownload URLs:\n\n"
     final_text += "\n".join(file_links)
+    final_text += f"\n\n🔗 <b>Batch Link:</b> {batch_link}"
     
     if len(final_text) > 4050:
         import io

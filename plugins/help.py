@@ -26,5 +26,6 @@ async def admin_help(client: Client, message: Message):
 /delpremium {user_id} - Remove Premium
 /premiumusers - List of Premium Users
 /db, /adddb, /removedb - Multi-Database management
+/img - Reply to any photo/video to upload to Graph.org (5MB limit)
 """
     await message.reply(help_text)

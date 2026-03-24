@@ -155,6 +155,15 @@ class Bot(Client):
             sys.exit()
         self.LOGGER(__name__, self.name).info("Bot Started!!")
         
+        # Start anti-sleep ping loop
+        try:
+            from plugins.anti_sleep import keep_alive_loop
+            asyncio.create_task(keep_alive_loop())
+            self.LOGGER(__name__, self.name).info("Anti-sleep ping loop started.")
+        except Exception as e:
+            self.LOGGER(__name__, self.name).warning(f"Anti-sleep init failed: {e}")
+
+        
         # Send restart msge to owner
         try:
             restart_message = "<b>›› ʜᴇʏ sᴇɴᴘᴀɪ!!\n ɪ'ᴍ ᴀʟɪᴠᴇ ɴᴏᴡ 🍃...</b>"

@@ -119,9 +119,14 @@ async def file_receiver(client: Client, message: Message):
     if ACTIVE_SESSIONS[user_id]["type"] == "movie":
         size_str = get_human_size(file_size)
         ACTIVE_SESSIONS[user_id]["files"].append({"size": size_str, "link": link})
+        count = len(ACTIVE_SESSIONS[user_id]["files"])
+        await message.reply(f"✅ Added file {count} ({size_str})", quote=True, disable_notification=True)
     else:
         ep_num = extract_episode(file_name)
         ACTIVE_SESSIONS[user_id]["files"].append({"name": file_name, "link": link, "ep": ep_num})
+        count = len(ACTIVE_SESSIONS[user_id]["files"])
+        ep_label = f"Ep {ep_num}" if ep_num else "Unknown"
+        await message.reply(f"✅ Added {ep_label} (Total: {count})", quote=True, disable_notification=True)
 
 # ─── Done command ─────────────────────────────────────────────
 @Client.on_message(filters.private & filters.command("done"), group=-1)

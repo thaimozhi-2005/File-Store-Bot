@@ -12,7 +12,7 @@ from pyrogram.errors.pyromod import ListenerTimeout
 async def db_channels_command(client: Client, message: Message):
     """Direct command to manage DB channels"""
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     # Show current DB channels status
     db_channels = getattr(client, 'db_channels', {})
@@ -160,7 +160,7 @@ __ᴜsᴇ ᴛʜᴇ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ ᴛᴏ ᴍᴀɴᴀɢᴇ ʏᴏ
 async def quick_add_db(client: Client, message: Message):
     """Quick command to add a DB channel"""
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     # Check if channel ID is provided in the command
     args = message.text.split()
@@ -232,7 +232,7 @@ async def quick_add_db(client: Client, message: Message):
 async def quick_remove_db(client: Client, message: Message):
     """Quick command to remove a DB channel"""
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     # Check if channel ID is provided in the command
     args = message.text.split()
@@ -336,7 +336,7 @@ async def close(client: Client, query: CallbackQuery):
 @Client.on_message(filters.command('ban'))
 async def ban(client: Client, message: Message):
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     try:
         user_ids = message.text.split(maxsplit=1)[1]
         c = 0

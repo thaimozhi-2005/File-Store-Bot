@@ -39,7 +39,7 @@ async def get_db_channels_info(client):
 @Client.on_message(filters.private & filters.command('batch'))
 async def batch(client: Client, message: Message):
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     # Get all database channels with links
     db_channels_info = await get_db_channels_info(client)
@@ -97,7 +97,7 @@ async def batch(client: Client, message: Message):
 @Client.on_message(filters.private & filters.command('genlink'))
 async def link_generator(client: Client, message: Message):
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     # Get all database channels with links
     db_channels_info = await get_db_channels_info(client)
@@ -133,7 +133,7 @@ async def link_generator(client: Client, message: Message):
 @Client.on_message(filters.private & filters.command("nbatch"))
 async def nbatch(client: Client, message: Message):
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     args = message.text.split()
     if len(args) < 2 or not args[1].isdigit():

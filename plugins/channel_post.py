@@ -9,7 +9,7 @@ from helper.helper_func import encode
 @Client.on_message(filters.private & ~filters.command(['start', 'shortner','users','broadcast','batch','genlink','bulk', 'movie', 'series', 'done', 'stats', 'pbroadcast', 'db', 'adddb', 'add_db', 'removedb', 'rm_db',  'ban', 'unban', 'addpremium', 'delpremium', 'premiumusers', 'request', 'profile']))
 async def channel_post(client: Client, message: Message):
     if message.from_user.id not in client.admins:
-        return await message.reply(client.reply_text)
+        return
     
     # Check if user is in an active ask state (custom guard to prevent double-post)
     if hasattr(client, "active_askers") and message.from_user.id in client.active_askers:

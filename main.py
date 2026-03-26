@@ -1,20 +1,15 @@
 import asyncio
+import logging
 
-# Fix for Pyrogram on Python 3.10+
-import asyncio
-try:
-    asyncio.get_event_loop()
-except RuntimeError:
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    
 from bot import Bot, web_app
 from pyrogram import compose
+from pyrogram.errors import FloodWait
 from config import *
+
+log = logging.getLogger(__name__)
 
 async def main():
     app = []
-
-    # Create bot instance using config.py values
     app.append(
         Bot(
             SESSION,
@@ -34,7 +29,18 @@ async def main():
         )
     )
 
-    await compose(app)
+    # Handle FloodWait on startup - wait and retry instead of crashing
+    while True:
+        try:
+            await compose(app)
+            break
+        except FloodWait as e:
+            wait = e.value if hasattr(e, 'value') else e.x
+            log.warning(f"FloodWait on startup! Waiting {wait} seconds before retrying...")
+            await asyncio.sleep(wait + 10)
+        except Exception as e:
+            log.error(f"Startup error: {e}")
+            raise
 
 
 async def runner():

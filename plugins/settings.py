@@ -469,8 +469,9 @@ __Use the appropriate button below to add or remove any admin based on your need
 
 @Client.on_callback_query(filters.regex("^protect$"))
 async def protect(client, query):
+    await query.answer("✅ ᴘʀᴏᴛᴇᴄᴛ ᴄᴏɴᴛᴇɴᴛ ᴜᴘᴅᴀᴛᴇᴅ!", show_alert=False)
     client.protect = False if client.protect else True
-    return await settings(client, query)
+    return await settings_page_2(client, query)
 
 #===============================================================#
 

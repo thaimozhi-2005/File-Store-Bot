@@ -6,7 +6,7 @@ from helper.helper_func import encode
 
 #===============================================================#
 
-@Client.on_message(filters.private & ~filters.command(['start', 'shortner','users','broadcast','batch','genlink','bulk', 'movie', 'series', 'done', 'stats', 'pbroadcast', 'db', 'adddb', 'add_db', 'removedb', 'rm_db',  'ban', 'unban', 'addpremium', 'delpremium', 'premiumusers', 'request', 'profile']))
+@Client.on_message(filters.private & ~filters.command & (filters.document | filters.video | filters.audio | filters.photo))
 async def channel_post(client: Client, message: Message):
     if message.from_user.id not in client.admins:
         return

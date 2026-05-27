@@ -109,7 +109,11 @@ class MongoDB:
         await self.user_data.insert_one({'_id': user_id, 'ban': ban})
 
     async def full_userbase(self) -> list[int]:
-        cursor = self.user_data.find()
+        # Filter for actual Telegram user IDs (real users have numeric positive IDs)
+        # The 'users' collection also stores system settings documents where _id is a string:
+        # e.g., "fsub_channels", "shortner_settings", "db_channels", "bot_settings", "messages_settings", "admins_list"
+        # and _id: 1 is the channel list. We filter them out using: _id > 1 and type of _id is numeric.
+        cursor = self.user_data.find({"_id": {"$gt": 1, "$type": ["int", "long"]}})
         return [doc['_id'] async for doc in cursor]
 
     async def del_user(self, user_id: int):
